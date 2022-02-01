@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON API Data to HTML Table</title>
+    <style>
+        div, table {
+            width: 100%;
+        }
+        th, td {
+            font:14px Verdana;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="showData"></div>
+</body>
+
+<script>
+fetch('https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=data&format=json')
+.then(response => response.json())
+.then(data => {
+  console.log(data);
+  var JsonData = data['ISBN:9780980200447'];
+   var col = ['Title', 'No of Pages', 'Image'];        
+   var table = document.createElement("table");
+   var tr = table.insertRow(-1);
+
+    for (var i = 0; i < col.length; i++) {
+        var th = document.createElement("th");
+        th.innerHTML = col[i];
+        tr.appendChild(th);
+    }
+
+    tr = table.insertRow(-1);
+    var tabCell = tr.insertCell(-1);
+    tabCell.innerHTML = JsonData.title;
+    var tabCell = tr.insertCell(-1);
+    tabCell.innerHTML = JsonData.number_of_pages;
+    var tabCell = tr.insertCell(-1);
+    tabCell.innerHTML = '<img src="'+JsonData.cover.medium+'" />';
+
+    var divContainer = document.getElementById("showData");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
+})
+.catch(error => console.error(error))
+        
+</script>
+</html>
